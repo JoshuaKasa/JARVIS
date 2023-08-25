@@ -69,7 +69,7 @@ def get_current_weather():
 
     # Getting the weather data
     base_url = "http://api.openweathermap.org/data/2.5/weather?"
-    with open("WEATHER.txt", "r") as f:
+    with open("../WEATHER.txt", "r") as f:
         api_key = f.read()
     url = base_url + "appid=" + api_key + "&q=" + city
 
@@ -98,7 +98,7 @@ def get_current_time():
 
 def send_whatsapp_message(phone_number, message):
     # Reading all the phone numbers
-    with open("PHONENUMBERS.txt", "r") as f:
+    with open("../PHONENUMBERS.txt", "r") as f:
         numbers_list = f.read().split("\n")
     # Checking and writing the message on WhatsApp
     if phone_number == "girlfriend":
@@ -221,7 +221,7 @@ functions = [
 ]
 
 # read and store the OpenAI API key
-with open("OPENAI.txt", "r") as f:
+with open("../OPENAI.txt", "r") as f:
     key = f.read()
 openai.api_key = key
 
@@ -257,7 +257,7 @@ while True:
             r.adjust_for_ambient_noise(source, duration=0.7) # Adjusting the ambient noise
 
             # Playing a beep sound to notify the user that the assistant is listening
-            sound = AudioSegment.from_mp3("beep.mp3")
+            sound = AudioSegment.from_mp3("audio/Beep.mp3")
             play(sound)
 
             # Getting the user speech
