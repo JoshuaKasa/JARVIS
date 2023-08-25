@@ -96,26 +96,34 @@ def get_current_time():
 
     return current_time
 
-def send_whatsapp_message(phone_number, message):
-    # Reading all the phone numbers
+def send_whatsapp_message(phone_number_key, message, delay_minutes=1):
+    # Define a dictionary for phone number mappings
+    phone_numbers = {
+        "girlfriend": 0,
+        "mom": 1,
+        "giovanni": 2,
+    }
+
+    # Read phone numbers from the file
     with open("../PHONENUMBERS.txt", "r") as f:
         numbers_list = f.read().split("\n")
-    # Checking and writing the message on WhatsApp
-    if phone_number == "girlfriend":
-        phone_number = numbers_list[0]
-    elif phone_number == "mom":
-        phone_number = numbers_list[1]
-    elif phone_number == "giovanni":
-        phone_number = numbers_list[2]
 
-    # We need to get the hour and minute to send the message, not the time we want to spend before sending it
+    # Get the corresponding phone number from the dictionary
+    if phone_number_key in phone_numbers:
+        phone_number = numbers_list[phone_numbers[phone_number_key]]
+    else:
+        raise ValueError("Invalid phone number key")
+
+    # Get current time
     current_time = datetime.datetime.now()
     time_hour = current_time.hour
     time_minute = current_time.minute
 
-    # Typing the message and sending it
-    pywhatkit.sendwhatmsg(phone_number, message, time_hour, time_minute + 1)
-    keyboard.press_and_release("enter") # Pressing enter to send the message
+    # Sending the message with the specified delay
+    pywhatkit.sendwhatmsg(phone_number, message, time_hour, time_minute + delay_minutes)
+
+    # Pressing enter to send the message
+    keyboard.press_and_release("enter")
 
     function_info = {
         "phone_number": phone_number,
