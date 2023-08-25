@@ -1,6 +1,9 @@
-# Jarvis Personal Assistant Project
+# J.A.R.V.I.S.
+### Just A Rather Very Intelligent System
 
-Jarvis is a personal assistant project developed using Python. It leverages various libraries and APIs to provide a range of functionalities, making it an interactive and versatile virtual assistant.
+[![GitHub license](https://img.shields.io/github/license/JoshuaKasa/JARVIS)](https://github.com/JoshuaKasa/JARVIS/blob/main/LICENSE)
+
+Jarvis is a personal assistant developed using Python and OpenAI's GPT 3.5. It leverages various libraries and APIs to provide a range of functionalities, making it interactive and versatile.
 
 ## Table of Contents
 
