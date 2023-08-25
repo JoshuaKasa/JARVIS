@@ -1,0 +1,9 @@
+geocoder==1.38.1
+keyboard==0.13.5
+openai==0.27.9
+pydub==0.25.1
+pyttsx3==2.90
+pywhatkit==5.4
+Requests==2.31.0
+SpeechRecognition==3.10.0
+speedtest_cli==2.1.3
