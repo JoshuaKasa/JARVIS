@@ -11,9 +11,6 @@ Jarvis is a personal assistant developed using Python and OpenAI's GPT 3.5. It l
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Functions](#functions)
-- [Contributors](#contributors)
-- [License](#license)
 
 ## Overview
 
