@@ -7,102 +7,17 @@ from pydub import AudioSegment
 from pydub.playback import play
 from JarvisPrompt import jarvis_prompt
 from functions.Functions import *
+from functions.FunctionsList import functions
 
 # Define a dictionary to map function names to their implementations
 available_functions = {
     "execute_speedtest": execute_speedtest,
     "execute_cmd_command": execute_cmd_command,
     "open_website": open_website,
-    "exit_program": exit_program,
     "get_current_weather": get_current_weather,
     "get_current_time": get_current_time,
     "send_whatsapp_message": send_whatsapp_message,
 }
-
-functions = [
-
-    {
-        "name": "execute_speedtest",
-        "description": "Executes a speedtest for the internet connection, returning the download, upload and ping",
-        "parameters": {
-            "type": "object",
-            "properties": {}
-        }
-    },
-
-    {
-        "name": "execute_cmd_command",
-        "description": "Executes a command in the CMD",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "command": {
-                    "type": "string",
-                    "description": "The command to execute"
-                }
-            }
-        }
-    },
-
-    {
-        "name": "open_website",
-        "description": "Opens a website",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "url": {
-                    "type": "string",
-                    "description": "The URL of the website to open"
-                }
-            }
-        }
-    },
-
-    {
-        "name": "exit_program",
-        "description": "Exits the program or terminates the Jarivis protocol",
-        "parameters": {
-            "type": "object",
-            "properties": {}
-        }
-    },
-
-    {
-        "name": "get_current_weather",
-        "description": "Gets the current weather of the user's location",
-        "parameters": {
-            "type": "object",
-            "properties": {}
-        }
-    },
-
-    {
-        "name": "get_current_time",
-        "description": "Gets the current time",
-        "parameters": {
-            "type": "object",
-            "properties": {}
-        }
-    },
-
-    {
-        "name": "send_whatsapp_message",
-        "description": "Sends a WhatsApp message",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "phone_number_key": {
-                    "type": "string",
-                    "enum": ["girlfriend", "mom", "giovanni"]
-                },
-                "message": {
-                    "type": "string",
-                    "description": "The message to send"
-                }
-            }
-        }
-    }
-]
 
 # read and store the OpenAI API key
 with open("../OPENAI.txt", "r") as f:
