@@ -39,83 +39,102 @@ message_history = []
 system_prompt = jarvis_prompt
 
 # Adding the initial prompt (and rest) to the message history
-initial_prompt = "Hello sir, I'm Jarvis, your personal assistant. How can I help you?"
+initial_prompt = "Welcome back, sir"
 message_history.append({"role": "system", "content": system_prompt})
 message_history.append({"role": "assistant", "content": initial_prompt})
 
-print("Hello sir, I'm Jarvis, your personal assistant. How can I help you?")
-engine.say("Hello sir, I'm Jarvis, your personal assistant. How can I help you?")
+print(initial_prompt)
+engine.say(initial_prompt)
 engine.runAndWait()
 
-while True:
 
-    user_message: str = "" # Resetting the user message
-    # Getting the user speech
-    try:
-        with sr.Microphone() as source: # Using the microphone as the audio source
-            r.adjust_for_ambient_noise(source, duration=0.7) # Adjusting the ambient noise
+def main() -> None:
+    while True:
 
-            # Playing a beep sound to notify the user that the assistant is listening
-            sound = AudioSegment.from_mp3("audio/Beep.mp3")
-            play(sound)
+        user_message: str = ""  # Resetting the user message
+        # Getting the user speech
+        try:
+            with sr.Microphone() as source:  # Using the microphone as the audio source
+                r.adjust_for_ambient_noise(source, duration=0.7)  # Adjusting the ambient noise
 
-            # Getting the user speech
-            audio = r.listen(source) # Getting the audio from the microphone
-            user_message = r.recognize_google(audio)
+                # Playing a beep sound to notify the user that the assistant is listening
+                sound = AudioSegment.from_mp3("audio/Beep.mp3")
+                play(sound)
 
-            print(user_message)
-    except: # If the assistant couldn't understand the user
-        pass # Do nothing
+                # Getting the user speech
+                audio = r.listen(source)  # Getting the audio from the microphone
+                user_message = r.recognize_google(audio)
 
-    if user_message != "": # If the user said something add it to the message history
-        message_history.append({"role": "user", "content": user_message}) # Adding the user message to the message history
+                print(user_message)
+        except:  # If the assistant couldn't understand the user
+            pass  # Do nothing
 
-        # Creating the language model (GPT-4)
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo-0613",
-            messages=message_history,
-            functions=functions,
-            function_call="auto",
-        )
+        if user_message != "":  # If the user said something add it to the message history
+            message_history.append(
+                {"role": "user", "content": user_message})  # Adding the user message to the message history
 
-        response_message = response["choices"][0]["message"] # Getting the response message
+            # Creating the language model (GPT-3.5)
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo-0613",
+                messages=message_history,
+                functions=functions,
+                function_call="auto",
+            )
 
-        # Checking if GPT returned a function call (wants to call a function from the available_functions dictionary)
-        if response_message.get("function_call"):
-            # Getting function information
-            function_name = response_message["function_call"]["name"]
-            function_args = json.loads(response_message["function_call"]["arguments"])
+            response_message = response["choices"][0]["message"]  # Getting the response message
 
-            # Calling the function
-            if function_name in available_functions:
-                function_to_call = available_functions[function_name]
-                function_response = function_to_call(**function_args)
-
-                # Adding the function response to the message history and getting the second response
-                message_history.append(
-                    {
-                        "role": "function",
-                        "name": function_name,
-                        "content": function_response,
-                    }
-                )
-
-                # Creating the second language for the function response
-                second_response = openai.ChatCompletion.create(
+            # Checking if GPT returned a function call (wants to call a function from the available_functions dictionary)
+            if response_message.get("function_call"):
+                # Generate a response before executing the function
+                pre_function_response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo-0613",
                     messages=message_history,
                 )
-                message_history.append(
-                    {"role": "assistant", "content": second_response["choices"][0]["message"]["content"]})
-                print(second_response["choices"][0]["message"]["content"])
+                pre_function_content = pre_function_response["choices"][0]["message"]["content"]
+                message_history.append({"role": "assistant", "content": pre_function_content})
+                print(pre_function_content)
+
+                engine.say(pre_function_content)  # As always, speak the reply
+                engine.runAndWait()
+
+                # Getting function information
+                function_name = response_message["function_call"]["name"]
+                function_args = json.loads(response_message["function_call"]["arguments"])
+
+                # Calling the function
+                if function_name in available_functions:
+                    function_to_call = available_functions[function_name]
+                    function_response = function_to_call(**function_args)
+
+                    # Adding the function response to the message history and getting the second response
+                    message_history.append(
+                        {
+                            "role": "function",
+                            "name": function_name,
+                            "content": function_response,
+                        }
+                    )
+
+                    # Creating the second language for the function response
+                    second_response = openai.ChatCompletion.create(
+                        model="gpt-3.5-turbo-0613",
+                        messages=message_history,
+                    )
+                    message_history.append(
+                        {"role": "assistant", "content": second_response["choices"][0]["message"]["content"]})
+                    print(second_response["choices"][0]["message"]["content"])
+
+                    # Speaking the reply
+                    engine.say(second_response["choices"][0]["message"]["content"])
+                    engine.runAndWait()
+            else:
+                message_history.append({"role": "assistant", "content": response_message["content"]})
+                print(response_message["content"])
 
                 # Speaking the reply
-                engine.say(second_response["choices"][0]["message"]["content"])
+                engine.say(response_message["content"])
                 engine.runAndWait()
-        else:
-            message_history.append({"role": "assistant", "content": response_message["content"]})
-            print(response_message["content"])
 
-            # Speaking the reply
-            engine.say(response_message["content"])
-            engine.runAndWait()
+
+if __name__ == "__main__":
+    main()

@@ -123,12 +123,12 @@ def send_whatsapp_message(phone_number_key: str, message: str, delay_minutes: in
         time_minute = current_time.minute
 
         pywhatkit.sendwhatmsg(phone_number, message, time_hour, time_minute + delay_minutes)
-        keyboard.press_and_release("enter")
 
         function_info = {
             "phone_number": phone_number,
             "message": message,
         }
+        keyboard.press_and_release("enter")
 
         return json.dumps(function_info)
     except Exception as e:
