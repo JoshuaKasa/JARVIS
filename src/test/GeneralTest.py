@@ -178,8 +178,33 @@ time_minute = current_time.minute
 pywhatkit.sendwhatmsg("+393393413531", "Hello, this is a test", time_hour, time_minute + 1
                       )"""
 
-import os
+"""import os
 
 # Get all the desktop folders using only os.system
 desktop_folders = os.system("cd C:\\Users\\vince\\Desktop && dir /b /a:d")
-print(desktop_folders)
+print(desktop_folders)"""
+
+"""import json ------------------ NOT WORKING FFS
+import ctypes
+
+try:
+    wc_syscommand = 0xF170
+    sc_monitorpower = 0xF170
+    monitor_shutoff = 2
+
+    ctypes.windll.user32.SendMessageW(
+        0xFFF,
+        wc_syscommand,
+        sc_monitorpower,
+        monitor_shutoff
+    )
+except Exception as e:
+    "Could not turn off monitor"""
+
+"""import ctypes ---------------- WORKING
+import win32api, win32con
+
+def turnoff_monitor():
+    win32api.SendMessage(win32con.HWND_BROADCAST, win32con.WM_SYSCOMMAND, win32con.SC_MONITORPOWER, 2)
+
+turnoff_monitor()"""

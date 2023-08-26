@@ -3,8 +3,6 @@ import pyttsx3
 
 import speech_recognition as sr
 
-from pydub import AudioSegment
-from pydub.playback import play
 from JarvisPrompt import jarvis_prompt
 from functions.Functions import *
 from functions.FunctionsList import functions
@@ -17,6 +15,8 @@ available_functions = {
     "get_current_weather": get_current_weather,
     "get_current_time": get_current_time,
     "send_whatsapp_message": send_whatsapp_message,
+    "turnoff_monitor": turnoff_monitor,
+    "set_alarm": set_alarm,
 }
 
 # read and store the OpenAI API key

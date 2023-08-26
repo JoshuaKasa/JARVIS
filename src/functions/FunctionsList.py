@@ -80,5 +80,32 @@ functions = [
                 }
             }
         }
+    },
+
+    {
+        "name": "turnoff_monitor",
+        "description": "Turns off the monitor",
+        "parameters": {
+            "type": "object",
+            "properties": {}
+        }
+    },
+
+    {
+        "name": "set_alarm",
+        "description": "Sets an alarm with the specified minutes and seconds",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "minutes": {
+                    "type": "integer",
+                    "description": "The minutes of the alarm"
+                },
+                "seconds": {
+                    "type": "integer",
+                    "description": "The seconds of the alarm"
+                }
+            }
+        }
     }
 ]

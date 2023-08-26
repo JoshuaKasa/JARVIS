@@ -1,4 +1,6 @@
 import json
+import win32api
+import win32con
 import datetime
 import geocoder
 import keyboard
@@ -7,6 +9,9 @@ import speedtest
 import pywhatkit
 import subprocess
 import webbrowser
+
+from pydub import AudioSegment
+from pydub.playback import play
 
 def execute_speedtest() -> str:
     try:
@@ -126,5 +131,53 @@ def send_whatsapp_message(phone_number_key: str, message: str, delay_minutes: in
         }
 
         return json.dumps(function_info)
+    except Exception as e:
+        return json.dumps({"error": str(e)})
+
+def turnoff_monitor() -> str:
+    try:
+        win32api.SendMessage(win32con.HWND_BROADCAST, win32con.WM_SYSCOMMAND, win32con.SC_MONITORPOWER, 2)
+
+        function_info = {
+            "name": "turnoff_monitor",
+            "description": "Turns off the monitor",
+        }
+
+        return json.dumps(function_info)
+
+    except Exception as e:
+        return json.dumps({"error": str(e)})
+
+def set_alarm(minutes: int, seconds: int) -> str:
+    try:
+        current_time = datetime.datetime.now()
+        time_hour = current_time.hour
+        time_minute = current_time.minute
+        time_second = current_time.second
+
+        alarm_time = datetime.datetime(
+            current_time.year,
+            current_time.month,
+            current_time.day,
+            time_hour,
+            time_minute + minutes,
+            time_second + seconds
+        )
+
+        while True:
+            current_time = datetime.datetime.now()
+            if current_time >= alarm_time:
+                play(AudioSegment.from_mp3("audio/Alarm.mp3"))
+                break
+
+        function_info = {
+            "name": "set_alarm",
+            "description": "Sets an alarm",
+            "minutes": minutes,
+            "seconds": seconds,
+        }
+
+        return json.dumps(function_info)
+
     except Exception as e:
         return json.dumps({"error": str(e)})
