@@ -55,7 +55,7 @@ def main() -> None:
         # Getting the user speech
         try:
             with sr.Microphone() as source:  # Using the microphone as the audio source
-                r.adjust_for_ambient_noise(source, duration=0.7)  # Adjusting the ambient noise
+                r.adjust_for_ambient_noise(source, duration=0.3)  # Adjusting the ambient noise
 
                 # Playing a beep sound to notify the user that the assistant is listening
                 sound = AudioSegment.from_mp3("audio/Beep.mp3")

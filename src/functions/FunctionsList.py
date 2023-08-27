@@ -107,5 +107,19 @@ functions = [
                 }
             }
         }
+    },
+
+    {
+        "name": "play_music_from_link",
+        "description": "Plays music from a YouTube link",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "youtube_link": {
+                    "type": "string",
+                    "description": "The link of the YouTube video to play"
+                },
+            }
+        }
     }
 ]

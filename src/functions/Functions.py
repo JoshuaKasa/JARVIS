@@ -1,4 +1,6 @@
+import os
 import json
+import tempfile
 import win32api
 import win32con
 import datetime
@@ -10,6 +12,7 @@ import pywhatkit
 import subprocess
 import webbrowser
 
+from pytube import YouTube
 from pydub import AudioSegment
 from pydub.playback import play
 
@@ -181,3 +184,42 @@ def set_alarm(minutes: int, seconds: int) -> str:
 
     except Exception as e:
         return json.dumps({"error": str(e)})
+
+# Without needing to download the video
+def play_music_from_link(youtube_link: str) -> str:
+    try:
+        # Initializing the YouTube downloader
+        yt = YouTube(youtube_link)
+
+        # Get the best audio stream available
+        audio_stream = yt.streams.filter(only_audio=True).first()
+
+        # Create a temporary file to store the audio
+        with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as temp_audio_file:
+            temp_audio_path = temp_audio_file.name
+
+            # Download the audio stream
+            audio_stream.download(output_path=tempfile.gettempdir(), filename='Audio')
+
+            # Load and play the audio
+            audio = AudioSegment.from_file(temp_audio_path)
+            play(audio)
+
+        function_info = {
+            "name": "play_music_from_link",
+            "description": "Plays music from a YouTube link",
+            "youtube_link": youtube_link,
+        }
+
+        return json.dumps(function_info)
+
+    except Exception as e:
+        return json.dumps({"error": str(e)})
+
+    finally:
+        # Delete the temporary audio file after playing or in case of an error
+        if os.path.exists(temp_audio_path):
+            os.remove(temp_audio_path)
+
+
+play_music_from_link("https://www.youtube.com/watch?v=nQii-MkTfQw&t=1158s")
